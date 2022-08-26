@@ -1,0 +1,6 @@
+{
+  "editor.formatOnSave": true,
+  "python.autoComplete.extraPaths": ["api"],
+  "python.formatting.provider": "black",
+  "python.analysis.extraPaths": ["api"]
+}

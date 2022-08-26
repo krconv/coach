@@ -1,0 +1,50 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+env:
+  CI: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    name: Deploy
+    if: success() && github.ref == 'refs/heads/main'
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v3
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          cache: yarn
+          cache-dependency-path: web/yarn.lock
+      - name: Install Web Dependencies
+        run: yarn --cwd web --frozen-lockfile install
+      - name: Build Web Assets
+        run: yarn --cwd web build
+      - name: Setup Python
+        uses: actions/setup-python@v4.0.0
+        with:
+          python-version: "3.10"
+      - name: Install Poetry
+        run: pip install poetry
+      - name: Prepare Deploy Bundle
+        run: scripts/bundle-deploy-dir.sh
+      - name: Setup Google Cloud Auth
+        uses: "google-github-actions/auth@v0"
+        with:
+          credentials_json: "${{ secrets.GOOGLE_CLOUD_CREDENTIALS }}"
+      - name: Deploy to Google Cloud
+        uses: google-github-actions/deploy-appengine@v0
+        with:
+          deliverables: deploy/app.yaml

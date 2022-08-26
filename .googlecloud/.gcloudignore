@@ -1,0 +1,16 @@
+.gcloudignore
+
+.git
+.gitignore
+
+# Python pycache:
+
+**pycache**/
+.pytest_cache/
+test/
+poetry.lock
+pyproject.toml
+
+/setup.cfg
+
+node_modules/
