@@ -1,29 +1,11 @@
 from typing import Union
 
-from fastapi import FastAPI
+import fastapi
 
-app = FastAPI()
+from . import endpoints
 
-
-"""
-s = requests.Session()
-base_url = 'https://api.onepeloton.com'
-payload = {'username_or_email': peloton_username, 'password': peloton_pw}
-s.post(base_url + '/auth/login', json=payload)
-
-https://github.com/geudrik/peloton-client-library
-"""
-
-@app.get("/")
-def read_root():
-    return {"Hello": "World"}
+app = fastapi.FastAPI(title="coach", openapi_url=f"/api/openapi.json")
 
 
-@app.get("/items/{item_id}")
-def read_item(item_id: int, q: Union[str, None] = None):
-    return {"item_id": item_id, "q": q}
-
-
-@app.get("/api/health")
-def read_root():
-    return {"status": "healthy"}
+app.include_router(endpoints.weights_router, prefix="/api/weights", tags=["weight"])
+app.include_router(endpoints.workouts_router, prefix="/api/workouts", tags=["workout"])

@@ -9,6 +9,7 @@
     "@types/node": "^17.0.33",
     "@types/react": "^18.0.9",
     "@types/react-dom": "^18.0.4",
+    "axios": "^0.27.2",
     "core-js": "^3.25.0",
     "dayjs": "^1.11.5",
     "intl": "^1.2.5",
@@ -35,7 +36,8 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "generate": "openapi --input http://localhost:8080/api/openapi.json --output src/api --name ApiClient --client axios --useOptions --useUnionTypes && prettier src/api --write"
   },
   "proxy": "http://localhost:8080",
   "browserslist": {
@@ -46,5 +48,8 @@
       "iOS 9"
     ]
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "openapi-typescript-codegen": "^0.23.0",
+    "prettier": "^2.7.1"
+  }
 }
