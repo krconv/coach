@@ -12,7 +12,7 @@ export class WeightService {
    * @returns any Successful Response
    * @throws ApiError
    */
-  public readRootApiWeightsGet(): CancelablePromise<any> {
+  public readRoot(): CancelablePromise<any> {
     return this.httpRequest.request({
       method: "GET",
       url: "/api/weights/",

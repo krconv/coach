@@ -10,16 +10,24 @@ export class WorkoutService {
   constructor(public readonly httpRequest: BaseHttpRequest) {}
 
   /**
-   * Read Root
+   * Get Workouts For Person
    * @returns PelotonWorkout Successful Response
    * @throws ApiError
    */
-  public readRootApiWorkoutsGet(): CancelablePromise<
-    Record<string, Array<PelotonWorkout>>
-  > {
+  public getWorkoutsForPerson({
+    person,
+  }: {
+    person: string;
+  }): CancelablePromise<Array<PelotonWorkout>> {
     return this.httpRequest.request({
       method: "GET",
       url: "/api/workouts/",
+      query: {
+        person: person,
+      },
+      errors: {
+        422: `Validation Error`,
+      },
     });
   }
 }

@@ -1,6 +1,6 @@
-import { AppShell, createStyles, Group } from "@mantine/core";
+import { AppShell, createStyles, Group, Title } from "@mantine/core";
+import dayjs from "dayjs";
 import React from "react";
-import { WeightGoals } from "./components/WeightGoals";
 import { WorkoutGoals } from "./components/WorkoutGoals";
 
 const useStyles = createStyles(() => ({
@@ -12,6 +12,7 @@ const useStyles = createStyles(() => ({
     width: "1024px",
     maxWidth: "1024px",
     margin: "0px",
+    border: "1px solid white",
   },
 }));
 
@@ -20,9 +21,13 @@ export const App: React.FC = () => {
 
   return (
     <AppShell classNames={{ main: classes.main }}>
-      <Group position="center" align="stretch" grow noWrap>
-        <WorkoutGoals />
-        <WeightGoals />
+      <Group direction="column" position="center">
+        <Title style={{ fontSize: "48px" }}>{dayjs().format("MMMM")}</Title>
+        <Group align="flex-start" spacing={64} noWrap>
+          <WorkoutGoals person="maddy" />
+          <WorkoutGoals person="kodey" />
+          <WorkoutGoals person="monica" />
+        </Group>
       </Group>
     </AppShell>
   );
