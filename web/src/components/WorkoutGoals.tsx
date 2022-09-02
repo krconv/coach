@@ -26,6 +26,7 @@ export const WorkoutGoals: React.FC<{
   const api = new ApiClient();
   const [workouts, setWorkouts] = useState<PelotonWorkout[] | null>(null);
   const [lastWorkout, setLastWorkout] = useState<PelotonWorkout | null>(null);
+  const [workoutInProgress, setWorkoutInProgress] = useState<boolean>(false);
   const today = useMemo(() => dayjs(new Date()).toDate(), []);
   const startOfMonth = useMemo(
     () => dayjs(today).startOf("month").toDate(),
@@ -39,9 +40,13 @@ export const WorkoutGoals: React.FC<{
   useEffect(() => {
     const fetch = () =>
       api.workout.getWorkoutsForPerson({ person }).then((workouts) => {
-        const completedRides = workouts.filter(
-          (workout) => workout.discipline === "cycling" && workout.is_complete
+        const rides = workouts.filter(
+          (workout) =>
+            workout.discipline === "cycling" &&
+            !workout.name.toLowerCase().includes("cool down")
         );
+        const completedRides = rides.filter((workout) => workout.is_complete);
+        setWorkoutInProgress(rides.length > 0 && !rides[0].is_complete);
         setWorkouts(
           completedRides.filter(
             (workout) =>
@@ -52,9 +57,9 @@ export const WorkoutGoals: React.FC<{
         setLastWorkout(completedRides.length > 0 ? completedRides[0] : null);
       });
     fetch();
-    const interval = setInterval(fetch, 15000);
+    const interval = setInterval(fetch, workoutInProgress ? 5000 : 600000);
     return () => clearInterval(interval);
-  }, []);
+  }, [workoutInProgress]);
 
   return (
     <Group direction="column" position="center" grow spacing={0} mx={32}>
@@ -118,7 +123,13 @@ export const WorkoutGoals: React.FC<{
           <Card.Section p="md" pb={0}>
             <Text>Last Ride</Text>
             <Title order={3}>{lastWorkout.name}</Title>
-            <Text>{(dayjs(lastWorkout.created_at) as any).fromNow()}</Text>
+            <Text>
+              {(
+                dayjs(lastWorkout.created_at)
+                  .add(lastWorkout.duration || 0, "seconds")
+                  .subtract(4, "hours") as any
+              ).fromNow()}
+            </Text>
           </Card.Section>
           <Card.Section p="md" pb={0}>
             <Group direction="column" spacing="xs" align="center">
