@@ -25,7 +25,7 @@ class _Settings(pydantic.BaseSettings):
             value = client.access_secret_version(
                 name=f"projects/{self.GOOGLE_CLOUD_PROJECT}/secrets/{secret}/versions/latest"
             )
-            self.__setattr__(setting, json.loads(value.payload.data.decode()))
+            setattr(self, setting, json.loads(value.payload.data.decode()))
 
 
 settings = _Settings()

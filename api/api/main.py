@@ -15,7 +15,6 @@ app = fastapi.FastAPI(
 @app.on_event("startup")
 def on_startup():
     settings.on_startup()
-    print(settings)
 
 
 app.include_router(endpoints.weights_router, prefix="/api/weights", tags=["weight"])
