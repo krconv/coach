@@ -12,7 +12,6 @@ const useStyles = createStyles(() => ({
     width: "1024px",
     maxWidth: "1024px",
     margin: "0px",
-    border: "1px solid white",
   },
 }));
 
@@ -21,9 +20,9 @@ export const App: React.FC = () => {
 
   return (
     <AppShell classNames={{ main: classes.main }}>
-      <Group direction="column" position="center">
+      <Group direction="column" position="center" spacing={0}>
         <Title style={{ fontSize: "48px" }}>{dayjs().format("MMMM")}</Title>
-        <Group align="flex-start" spacing={64} noWrap>
+        <Group pt="sm" align="flex-start" spacing={0} noWrap>
           <WorkoutGoals person="maddy" />
           <WorkoutGoals person="kodey" />
           <WorkoutGoals person="monica" />

@@ -5,9 +5,8 @@ import { useEffect, useMemo, useState } from "react";
 import { ApiClient, PelotonWorkout } from "../api";
 
 const useStyles = createStyles((theme) => ({
-  calendarHeaderLevel: {
-    fontSize: "32px",
-    textTransform: "capitalize",
+  calendarHeader: {
+    display: "none !important",
   },
   day: {
     margin: "0px",
@@ -37,37 +36,6 @@ export const WorkoutGoals: React.FC<{
     [today]
   );
 
-  //   const [workoutDays, lateDays, totalDays] = useMemo<
-  //     [number, number, number]
-  //   >(() => {
-  //     let goalDays = 0;
-  //     let daysWithWorkout = 0;
-  //     let goalDaysWithWorkout = 0;
-
-  //     for (let i = 1; i <= endOfMonth.getDate(); i++) {
-  //       const day = dayjs(startOfMonth).add(i, "days").toDate();
-  //       const hasWorkout =
-  //         (workouts?.filter(
-  //           (workout) => new Date(workout.created_at).getDate() == i
-  //         ).length || []) > 0;
-  //       const isGoalDay = [1, 3, 5].includes(day.getDay());
-  //       if (isGoalDay) {
-  //         goalDays++;
-  //         if (hasWorkout) {
-  //           goalDaysWithWorkout++;
-  //         }
-  //       }
-  //       if (hasWorkout) {
-  //         daysWithWorkout++;
-  //       }
-  //     }
-  //     return [
-  //       goalDaysWithWorkout,
-  //       daysWithWorkout - goalDaysWithWorkout,
-  //       goalDays,
-  //     ];
-  //   }, [startOfMonth, endOfMonth, workouts]);
-
   useEffect(() => {
     const fetch = () =>
       api.workout.getWorkoutsForPerson({ person }).then((workouts) => {
@@ -89,14 +57,19 @@ export const WorkoutGoals: React.FC<{
   }, []);
 
   return (
-    <Group direction="column" position="center" grow>
+    <Group direction="column" position="center" grow spacing={0} mx={32}>
+      <Title order={2} align="center" style={{ textTransform: "capitalize" }}>
+        {person}
+      </Title>
       <Calendar
         classNames={{
+          calendarHeader: classes.calendarHeader,
           day: classes.day,
           outside: classes.outside,
           weekend: classes.weekend,
-          calendarHeaderLevel: classes.calendarHeaderLevel,
         }}
+        mt="md"
+        mb="md"
         month={today}
         size="sm"
         allowLevelChange={false}
@@ -105,7 +78,7 @@ export const WorkoutGoals: React.FC<{
         onChange={() => {}}
         minDate={startOfMonth}
         maxDate={endOfMonth}
-        labelFormat={`[${person}]`}
+        labelFormat=" "
         dayStyle={(date, modifiers) => {
           const day = date.getDate();
           const workoutsForDay =
