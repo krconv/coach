@@ -115,7 +115,7 @@ export const WorkoutGoals: React.FC<{
             return {
               backgroundColor:
                 day < today.getDate()
-                  ? `${theme.colors.red[8]}44`
+                  ? theme.colors.red[9]
                   : theme.colors.gray[8],
               borderRadius: "100%",
             };
