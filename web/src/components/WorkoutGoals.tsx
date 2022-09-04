@@ -112,10 +112,20 @@ export const WorkoutGoals: React.FC<{
             if (day > today.getDate()) {
               return {};
             }
+            const nextRideDay = { 1: 1, 3: 1, 5: 2 };
+            const ridesBeforeNextDay =
+              workouts?.filter(
+                (workout) =>
+                  day < new Date(workout.created_at).getDate() &&
+                  (new Date(workout.created_at).getDate() || 0) <=
+                    ((day + nextRideDay[date.getDay() as 1 | 3 | 5]) as number)
+              ) || [];
             return {
               backgroundColor:
                 day < today.getDate()
-                  ? theme.colors.red[9]
+                  ? ridesBeforeNextDay.length
+                    ? "#938200"
+                    : "#7b0000"
                   : theme.colors.gray[8],
               borderRadius: "100%",
             };
