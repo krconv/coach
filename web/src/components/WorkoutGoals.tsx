@@ -61,6 +61,11 @@ export const WorkoutGoals: React.FC<{
     return () => clearInterval(interval);
   }, [workoutInProgress]);
 
+  useEffect(() => {
+    const interval = setInterval(() => location.reload(), 60 * 60 * 1000);
+    return () => clearInterval(interval);
+  }, []);
+
   return (
     <Group direction="column" position="center" grow spacing={0} mx={32}>
       <Title order={2} align="center" style={{ textTransform: "capitalize" }}>
